@@ -37,10 +37,6 @@ const App = () => {
   }, [currentPage, searchQuery]);
 
   useEffect(() => {
-    setImages([]);
-  }, [searchQuery]);
-
-  useEffect(() => {
     if (searchQuery !== '' || currentPage !== 1) {
       handleGetImages();
     }
@@ -54,6 +50,7 @@ const App = () => {
     if (searchQuery !== value) {
       setSearchQuery(value);
       setCurrentPage(1);
+      setImages([]);
       window.scrollTo(0, 0);
     }
   };
