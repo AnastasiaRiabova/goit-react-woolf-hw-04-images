@@ -1,5 +1,5 @@
 import { createPortal } from 'react-dom';
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import styles from './Modal.module.css';
 
 const portalRoot = document.getElementById('modal-root');
@@ -11,21 +11,17 @@ export const Modal = ({ children, toggleModal }) => {
     }
   };
 
-  const handlePressKey = useCallback(
-    event => {
+  useEffect(() => {
+    const handlePressKey = event => {
       if (event.code === 'Escape') {
         toggleModal();
       }
-    },
-    [toggleModal]
-  );
-
-  useEffect(() => {
+    };
     document.addEventListener('keydown', handlePressKey);
     return () => {
       document.removeEventListener('keydown', handlePressKey);
     };
-  }, [handlePressKey]);
+  }, [toggleModal]);
 
   return createPortal(
     <div

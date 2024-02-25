@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TailSpin } from 'react-loader-spinner';
 import getImages from '../api/imageAPI';
 import { ImageGallery } from './ImageGallery/';
@@ -22,25 +22,24 @@ const App = () => {
   const [imageModal, setImageModal] = useState({});
   const [status, setStatus] = useState(statusList.idle);
 
-  const handleGetImages = useCallback(() => {
-    setStatus(statusList.loading);
-    getImages(searchQuery, currentPage)
-      .then(res => {
-        setImages(prevImages => [...prevImages, ...res.data.hits]);
-        setStatus(statusList.success);
-        setResultLength(res.data.totalHits);
-      })
-      .catch(error => {
-        setStatus(statusList.error);
-        console.error(error);
-      });
-  }, [currentPage, searchQuery]);
-
   useEffect(() => {
+    const handleGetImages = () => {
+      setStatus(statusList.loading);
+      getImages(searchQuery, currentPage)
+        .then(res => {
+          setImages(prevImages => [...prevImages, ...res.data.hits]);
+          setStatus(statusList.success);
+          setResultLength(res.data.totalHits);
+        })
+        .catch(error => {
+          setStatus(statusList.error);
+          console.error(error);
+        });
+    };
     if (searchQuery !== '' || currentPage !== 1) {
       handleGetImages();
     }
-  }, [searchQuery, currentPage, handleGetImages]);
+  }, [searchQuery, currentPage]);
 
   const handleSubmit = value => {
     if (searchQuery.toLowerCase() === value.toLowerCase()) {
